@@ -9,12 +9,15 @@ sorted_df['amount_earned'] = sorted_df['cost'] * sorted_df['2_year_earnings']
 
 budget = 500
 spent = 0
+earned = 0
 stocks_to_buy = []
-for value in sorted_df['cost']:
-    if spent < 500 and (spent + value) <= 500:
-        spent += value
-        stocks_to_buy.append(value)
+for index, row in sorted_df.iterrows():
+    if spent < 500 and (spent + row['cost']) <= 500:
+        spent += row['cost']
+        earned += row['amount_earned']
+        stocks_to_buy.append(row['name'])
 
 print(spent)
+print(earned)
 print(stocks_to_buy)
 print(sorted_df)
