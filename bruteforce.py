@@ -1,23 +1,29 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('sheet1.csv')
 
-sorted_df = df.sort_values(by=['2_year_earnings'], ascending=False)
+class BruteForce:
+    def __init__(self, datasheet):
+        self.df = pd.read_csv(datasheet)
+        self.budget = 500
+        self.spent = 0
+        self.earned = 0
+        self.stocks_to_buy = []
 
-sorted_df['amount_earned'] = sorted_df['cost'] * sorted_df['2_year_earnings']
+    def sort_and_add_earnings(self):
+        sorted_df = self.df.sort_values(by=['profit'], ascending=False)
+        sorted_df['amount_earned'] = sorted_df['price'] * sorted_df['profit']
+        return sorted_df
 
-budget = 500
-spent = 0
-earned = 0
-stocks_to_buy = []
-for index, row in sorted_df.iterrows():
-    if spent < 500 and (spent + row['cost']) <= 500:
-        spent += row['cost']
-        earned += row['amount_earned']
-        stocks_to_buy.append(row['name'])
+    def determine_optimal_investments(self):
+        for index, row in self.sort_and_add_earnings().iterrows():
+            if self.spent < 500 and (self.spent + row['price']) <= 500:
+                self.spent += row['price']
+                self.earned += row['amount_earned']
+                self.stocks_to_buy.append(row['name'])
+        return self.spent, self.earned, self.stocks_to_buy
 
-print(spent)
-print(earned)
-print(stocks_to_buy)
-print(sorted_df)
+
+obj_bruteforce = BruteForce('sheet1.csv')
+
+print(obj_bruteforce.determine_optimal_investments())
