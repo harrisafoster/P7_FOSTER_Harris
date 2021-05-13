@@ -1,14 +1,10 @@
 import pandas as pd
-import numpy as np
 
 
 class BruteForce:
     def __init__(self, datasheet):
         self.df = pd.read_csv(datasheet)
         self.budget = 500
-        self.spent = 0
-        self.earned = 0
-        self.stocks_to_buy = []
 
     def sort_and_add_earnings(self):
         sorted_df = self.df.sort_values(by=['profit'], ascending=False)
@@ -22,7 +18,7 @@ class BruteForce:
             list_of_items.append(new_item)
         return list_of_items
 
-    def knapsack(self, df):
+    def determine_optimal_investments(self, df):
         price = df['price']
         amount_earned = df['amount_earned']
         n = len(amount_earned)
@@ -64,4 +60,4 @@ class BruteForce:
 
 obj_bruteforce = BruteForce('sheet1.csv')
 
-print(obj_bruteforce.knapsack(obj_bruteforce.sort_and_add_earnings()))
+print(obj_bruteforce.determine_optimal_investments(obj_bruteforce.sort_and_add_earnings()))
