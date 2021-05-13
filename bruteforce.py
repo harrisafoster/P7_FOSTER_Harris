@@ -58,6 +58,6 @@ class BruteForce:
         return K[n][self.budget], final_items
 
 
-obj_bruteforce = BruteForce('sheet1.csv')
+obj_bruteforce = BruteForce('datasets/sheet1.csv')
 
 print(obj_bruteforce.determine_optimal_investments(obj_bruteforce.sort_and_add_earnings()))

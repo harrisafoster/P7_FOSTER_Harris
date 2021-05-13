@@ -29,9 +29,8 @@ class Optimisation:
         return spent, earned, stocks_to_buy
 
 
-
-obj_optimisation = Optimisation('dataset1.csv')
-obj_optimisation2 = Optimisation('dataset2.csv')
+obj_optimisation = Optimisation('datasets/dataset1.csv')
+obj_optimisation2 = Optimisation('datasets/dataset2.csv')
 
 print(obj_optimisation.optimise_investments())
 print(obj_optimisation2.optimise_investments())
