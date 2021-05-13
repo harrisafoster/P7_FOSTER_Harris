@@ -55,7 +55,7 @@ class BruteForce:
         for item in self.make_items():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return K[n][self.budget], final_items
+        return sum(prices[:-1]), K[n][self.budget], final_items
 
 
 obj_bruteforce = BruteForce('datasets/sheet1.csv')
