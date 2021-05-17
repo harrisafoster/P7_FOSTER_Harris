@@ -17,6 +17,13 @@ class Optimisation:
         sorted_df['amount_earned'] = sorted_df['price'] * (sorted_df['profit'] / 100)
         return sorted_df
 
+    def make_items(self):
+        list_of_items = []
+        for index, row in self.sort_data().iterrows():
+            new_item = {'name': row['name'], 'price': row['price'], 'amount_earned': row['amount_earned']}
+            list_of_items.append(new_item)
+        return list_of_items
+
     def optimise_investments(self):
         spent = 0
         earned = 0
@@ -50,8 +57,30 @@ class Optimisation:
             elif int(wt[n - 1] * 100) > W:
                 knapsack_matrix[n][W] = recursive_knapsack(wt, val, W, n - 1)
                 return knapsack_matrix[n][W]
+        recursive_knapsack(price, amount_earned, capacity, n)
 
-        return recursive_knapsack(price, amount_earned, capacity, n)
+        res = knapsack_matrix[n][capacity]
+        w = capacity
+        prices = []
+        amounts_earned = []
+        for i in range(n, 0, -1):
+            if res <= 0:
+                break
+            if res == knapsack_matrix[i - 1][w]:
+                continue
+            else:
+                prices.append(price[i - 1])
+                amounts_earned.append(amount_earned[i - 1])
+                res = res - amount_earned[i - 1]
+                w = w - int(price[i - 1] * 100)
+        final_items = []
+        associated_prices = []
+        for i in range(len(prices[:-1])):
+            associated_prices.append([prices[i], amounts_earned[i]])
+        for item in self.make_items():
+            if [item['price'], item['amount_earned']] in associated_prices:
+                final_items.append(item)
+        return sum(prices[:-1]), knapsack_matrix[n][capacity], final_items
 
 
 obj_opti_20 = Optimisation('datasets/sheet1.csv')
@@ -60,6 +89,10 @@ obj_optimisation2 = Optimisation('datasets/dataset2.csv')
 obj_optimisation_b = Optimisation('datasets/dataset1_sample.csv')
 obj_optimisation_2b = Optimisation('datasets/dataset2_sample.csv')
 
+#TODO problem in larger sample, grabbing extra value somewhere? getting 198 instead of 194 for first sample
+
+#print(obj_opti_20.make_items())
 print(obj_opti_20.determine_optimal_investments(obj_opti_20.sort_data()))
 print(obj_optimisation_b.determine_optimal_investments(obj_optimisation_b.sort_data()))
-print(obj_optimisation.determine_optimal_investments((obj_optimisation.sort_data())))
+'''print(obj_optimisation.optimise_investments())
+print(obj_optimisation.determine_optimal_investments((obj_optimisation.sort_data())))'''
