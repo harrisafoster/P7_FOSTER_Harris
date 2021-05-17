@@ -2,9 +2,9 @@ import pandas as pd
 
 
 class BruteForce:
-    def __init__(self, datasheet):
+    def __init__(self, datasheet, budget=500):
         self.df = pd.read_csv(datasheet)
-        self.budget = 500
+        self.budget = budget
 
     def sort_and_add_earnings(self):
         sorted_df = self.df.sort_values(by=['profit'], ascending=False)
@@ -14,7 +14,7 @@ class BruteForce:
     def make_items(self):
         list_of_items = []
         for index, row in self.sort_and_add_earnings().iterrows():
-            new_item = {'name': row['name'], 'price': row['price'], 'amount_earned': row['amount_earned']}
+            new_item = {'name': row['name'], 'price': row['price'], 'amount_earned': row['amount_earned'] / 100}
             list_of_items.append(new_item)
         return list_of_items
 
@@ -45,7 +45,7 @@ class BruteForce:
                 continue
             else:
                 prices.append(price[i - 1])
-                amounts_earned.append(amount_earned[i - 1])
+                amounts_earned.append(amount_earned[i - 1] / 100)
                 res = res - amount_earned[i - 1]
                 w = w - price[i - 1]
         final_items = []
@@ -55,7 +55,7 @@ class BruteForce:
         for item in self.make_items():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return sum(prices[:-1]), K[n][self.budget], final_items
+        return sum(prices), K[n][self.budget] / 100, final_items
 
 
 obj_bruteforce = BruteForce('datasets/sheet1.csv')
