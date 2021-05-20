@@ -48,13 +48,14 @@ class Optimisation:
                 return 0
             if knapsack_matrix[n][W] != -1:
                 return knapsack_matrix[n][W]
-            if int(wt[n - 1] * 100) <= W:
+            #TODO problem here, not stopping at right time for sheet of 20
+            if (int(wt[n - 1] * 100)) <= W:
                 knapsack_matrix[n][W] = max(
                     val[n - 1] + recursive_knapsack(
-                        wt, val, W - int(wt[n - 1] * 100), n - 1),
+                        wt, val, W - (int(wt[n - 1] * 100)), n - 1),
                     recursive_knapsack(wt, val, W, n - 1))
                 return knapsack_matrix[n][W]
-            elif int(wt[n - 1] * 100) > W:
+            elif (int(wt[n - 1] * 100)) > W:
                 knapsack_matrix[n][W] = recursive_knapsack(wt, val, W, n - 1)
                 return knapsack_matrix[n][W]
         recursive_knapsack(price, amount_earned, capacity, n)
@@ -75,12 +76,12 @@ class Optimisation:
                 w = w - int(price[i - 1] * 100)
         final_items = []
         associated_prices = []
-        for i in range(len(prices[:-1])):
+        for i in range(len(prices)):
             associated_prices.append([prices[i], amounts_earned[i]])
         for item in self.make_items():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return sum(prices[:-1]), sum(amounts_earned[:-1]), final_items
+        return sum(prices), sum(amounts_earned), final_items
 
 
 obj_opti_20 = Optimisation('datasets/sheet1.csv')
@@ -89,8 +90,7 @@ obj_optimisation2 = Optimisation('datasets/dataset2.csv')
 obj_optimisation_b = Optimisation('datasets/dataset1_sample.csv')
 obj_optimisation_2b = Optimisation('datasets/dataset2_sample.csv')
 
-#print(obj_opti_20.make_items())
 print(obj_opti_20.determine_optimal_investments(obj_opti_20.sort_data()))
 print(obj_optimisation_b.determine_optimal_investments(obj_optimisation_b.sort_data()))
-'''print(obj_optimisation.optimise_investments())
-print(obj_optimisation.determine_optimal_investments((obj_optimisation.sort_data())))'''
+#print(obj_optimisation.optimise_investments())
+#print(obj_optimisation.determine_optimal_investments((obj_optimisation.sort_data())))
