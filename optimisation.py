@@ -80,7 +80,7 @@ class Optimisation:
         for item in self.make_items():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return sum(prices[:-1]), knapsack_matrix[n][capacity], final_items
+        return sum(prices[:-1]), sum(amounts_earned[:-1]), final_items
 
 
 obj_opti_20 = Optimisation('datasets/sheet1.csv')
@@ -88,8 +88,6 @@ obj_optimisation = Optimisation('datasets/dataset1.csv')
 obj_optimisation2 = Optimisation('datasets/dataset2.csv')
 obj_optimisation_b = Optimisation('datasets/dataset1_sample.csv')
 obj_optimisation_2b = Optimisation('datasets/dataset2_sample.csv')
-
-#TODO problem in larger sample, grabbing extra value somewhere? getting 198 instead of 194 for first sample
 
 #print(obj_opti_20.make_items())
 print(obj_opti_20.determine_optimal_investments(obj_opti_20.sort_data()))
