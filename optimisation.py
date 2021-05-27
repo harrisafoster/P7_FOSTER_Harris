@@ -48,8 +48,8 @@ class Optimisation:
                 return 0
             if knapsack_matrix[n][W] != -1:
                 return knapsack_matrix[n][W]
-            #TODO problem here, not stopping at right time for sheet of 20
             if (int(wt[n - 1] * 100)) <= W:
+                #TODO find a way to store chosen values here?
                 knapsack_matrix[n][W] = max(
                     val[n - 1] + recursive_knapsack(
                         wt, val, W - (int(wt[n - 1] * 100)), n - 1),
@@ -58,18 +58,19 @@ class Optimisation:
             elif (int(wt[n - 1] * 100)) > W:
                 knapsack_matrix[n][W] = recursive_knapsack(wt, val, W, n - 1)
                 return knapsack_matrix[n][W]
-        recursive_knapsack(price, amount_earned, capacity, n)
 
-        res = knapsack_matrix[n][capacity]
+        res = recursive_knapsack(price, amount_earned, capacity, n)
+        print(res)
         w = capacity
         prices = []
         amounts_earned = []
+        #TODO problem is here in the way it finds data.
         for i in range(n, 0, -1):
             if res <= 0:
                 break
             if res == knapsack_matrix[i - 1][w]:
                 continue
-            else:
+            elif w - int(price[i - 1] * 100) >= 0:
                 prices.append(price[i - 1])
                 amounts_earned.append(amount_earned[i - 1])
                 res = res - amount_earned[i - 1]
@@ -84,13 +85,12 @@ class Optimisation:
         return sum(prices), sum(amounts_earned), final_items
 
 
-obj_opti_20 = Optimisation('datasets/sheet1.csv')
-obj_optimisation = Optimisation('datasets/dataset1.csv')
-obj_optimisation2 = Optimisation('datasets/dataset2.csv')
-obj_optimisation_b = Optimisation('datasets/dataset1_sample.csv')
-obj_optimisation_2b = Optimisation('datasets/dataset2_sample.csv')
+test_20 = Optimisation('datasets/sheet1.csv')
+test_dataset1 = Optimisation('datasets/dataset1.csv')
+test_dataset2 = Optimisation('datasets/dataset2.csv')
+test_dataset1_sample = Optimisation('datasets/dataset1_sample.csv')
+test_dataset2_sample = Optimisation('datasets/dataset2_sample.csv')
 
-print(obj_opti_20.determine_optimal_investments(obj_opti_20.sort_data()))
-print(obj_optimisation_b.determine_optimal_investments(obj_optimisation_b.sort_data()))
-#print(obj_optimisation.optimise_investments())
-#print(obj_optimisation.determine_optimal_investments((obj_optimisation.sort_data())))
+print(test_20.determine_optimal_investments(test_20.sort_data()))
+#print(test_dataset1_sample.determine_optimal_investments(test_dataset1_sample.sort_data()))
+#print(test_dataset1.determine_optimal_investments((test_dataset1.sort_data())))
