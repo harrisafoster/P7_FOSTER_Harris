@@ -49,7 +49,8 @@ class Optimisation:
 
         def check_all_combinations(internal_price, internal_earned, internal_rmb, internal_index):
             """
-            Dynamic function that checks all possible combinations based on given parameters.
+            Dynamic function that checks all possible combinations based on given parameters
+            while eliminating combinations that are redundant.
             :param internal_price: list of prices of stocks
             :param internal_earned: list of possibles earnings of stocks
             :param internal_rmb: budget multiplied by 100 and rounded in order to avoid errors resultant of FLOAT type
