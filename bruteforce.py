@@ -14,7 +14,7 @@ class BruteForce:
 
     def sort_and_add_earnings(self):
         sorted_df = self.df.sort_values(by=['profit'], ascending=False)
-        sorted_df['amount_earned'] = sorted_df['price'] * sorted_df['profit']
+        sorted_df['amount_earned'] = sorted_df['price'] * (sorted_df['profit'] / 100)
         return sorted_df
 
     def make_items(self):
@@ -24,7 +24,7 @@ class BruteForce:
         """
         list_of_items = []
         for index, row in self.sort_and_add_earnings().iterrows():
-            new_item = {'name': row['name'], 'price': row['price'], 'amount_earned': row['amount_earned'] / 100}
+            new_item = {'name': row['name'], 'price': row['price'], 'amount_earned': row['amount_earned']}
             list_of_items.append(new_item)
         return list_of_items
 
@@ -48,6 +48,7 @@ class BruteForce:
                 if i == 0 or dollar_in_budget == 0:
                     combination_matrix[i][dollar_in_budget] = 0
                 elif int(price[i - 1] * 100) <= dollar_in_budget:
+                    # checks all possible maximums regardless of whether or not they already exist
                     combination_matrix[i][dollar_in_budget] \
                         = max(amount_earned[i - 1]
                               + combination_matrix[i - 1][dollar_in_budget - int(price[i - 1] * 100)],
@@ -66,7 +67,7 @@ class BruteForce:
                 continue
             else:
                 prices.append(price[i - 1])
-                amounts_earned.append(amount_earned[i - 1] / 100)
+                amounts_earned.append(amount_earned[i - 1])
                 final_result = final_result - amount_earned[i - 1]
                 reconstruction_budget = reconstruction_budget - int(price[i - 1] * 100)
         final_items = []

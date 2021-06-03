@@ -18,6 +18,11 @@ class Optimisation:
         return filtered_df
 
     def add_profit_column(self):
+        """
+        Sorts the filtered data and adds the profit column with the calculated values.
+        Sorting is only used for reconstruction of the chosen stocks, not for the algorithm itself.
+        :return: sorted, calculated dataframe
+        """
         df = self.filter_data()
         sorted_df = df.sort_values(by=['profit'], ascending=False)
         sorted_df['amount_earned'] = sorted_df['price'] * (sorted_df['profit'] / 100)
@@ -43,7 +48,7 @@ class Optimisation:
         amount_earned = df['amount_earned'].to_list()
         price = df['price'].to_list()
         rounded_multiplied_budget = self.budget * 100  # rmb
-        index = len(amount_earned)
+        index = len(amount_earned)  # total number of items
 
         combination_matrix = [[-1 for i in range(rounded_multiplied_budget + 1)] for j in range(index + 1)]
 
@@ -61,6 +66,7 @@ class Optimisation:
             if internal_index == 0 or internal_rmb == 0:
                 return 0
             if combination_matrix[internal_index][internal_rmb] != -1:
+                # This checks if a certain state of the matrix already exists in memory
                 return combination_matrix[internal_index][internal_rmb]
             if (int(internal_price[internal_index - 1] * 100)) <= internal_rmb:
                 combination_matrix[internal_index][internal_rmb] = max(
