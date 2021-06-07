@@ -11,6 +11,7 @@ class Optimisation:
         """
         self.df = pd.read_csv(datasheet)
         self.budget = budget
+        self.number_of_calculations = 0
 
     def filter_data(self):
         filtered_df = self.df.query('price > 0')
@@ -69,6 +70,7 @@ class Optimisation:
                 # This checks if a certain state of the matrix already exists in memory
                 return combination_matrix[internal_index][internal_rmb]
             if (int(internal_price[internal_index - 1] * 100)) <= internal_rmb:
+                self.number_of_calculations += 1
                 combination_matrix[internal_index][internal_rmb] = max(
                     internal_earned[internal_index - 1] + check_all_combinations(
                         internal_price, internal_earned,
@@ -105,7 +107,7 @@ class Optimisation:
         for item in self.make_item_list():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return sum(prices), sum(amounts_earned), final_items
+        return self.number_of_calculations, sum(prices), sum(amounts_earned), final_items
 
 
 if __name__ == "__main__":
@@ -132,10 +134,10 @@ if __name__ == "__main__":
                 continue
             else:
                 data_to_be_analyzed = Optimisation(('datasets/' + choice), int(budget_choice))
-                print("Format: total_spent, total_earned, stocks_to_buy", '\n',
+                print("Format: number_of_calculations, total_spent, total_earned, stocks_to_buy", '\n',
                       data_to_be_analyzed.determine_optimal_investments(data_to_be_analyzed.add_profit_column()))
                 break
     if custom_budget_choice != 'y':
         data_to_be_analyzed = Optimisation(('datasets/' + choice))
-        print("Format: total_spent, total_earned, stocks_to_buy", '\n',
+        print("Format: number_of_calculations, total_spent, total_earned, stocks_to_buy", '\n',
               data_to_be_analyzed.determine_optimal_investments(data_to_be_analyzed.add_profit_column()))

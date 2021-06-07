@@ -41,14 +41,15 @@ class BruteForce:
         amounts_earned = []
         rmb = self.budget * 100  # rounded multiplied budget
 
-        combination_matrix = [[0 for x in range(rmb + 1)] for x in range(index + 1)]
-
+        combination_matrix = [[0 for x in range(rmb + 1)] for y in range(index + 1)]
+        number_of_calculations = 0
         for i in range(index + 1):
             for dollar_in_budget in range(rmb + 1):
                 if i == 0 or dollar_in_budget == 0:
                     combination_matrix[i][dollar_in_budget] = 0
                 elif int(price[i - 1] * 100) <= dollar_in_budget:
-                    # checks all possible maximums regardless of whether or not they already exist
+                    # checks all possible maximums regardless of whether or not they have already been tested
+                    number_of_calculations += 1
                     combination_matrix[i][dollar_in_budget] \
                         = max(amount_earned[i - 1]
                               + combination_matrix[i - 1][dollar_in_budget - int(price[i - 1] * 100)],
@@ -77,7 +78,7 @@ class BruteForce:
         for item in self.make_items():
             if [item['price'], item['amount_earned']] in associated_prices:
                 final_items.append(item)
-        return sum(prices), sum(amounts_earned), final_items
+        return number_of_calculations, sum(prices), sum(amounts_earned), final_items
 
 
 if __name__ == "__main__":
@@ -104,10 +105,10 @@ if __name__ == "__main__":
                 continue
             else:
                 data_to_be_analyzed = BruteForce(('datasets/' + choice), int(budget_choice))
-                print("Format: total_spent, total_earned, stocks_to_buy", '\n',
+                print("Format: number_of_calculations, total_spent, total_earned, stocks_to_buy", '\n',
                       data_to_be_analyzed.determine_optimal_investments(data_to_be_analyzed.sort_and_add_earnings()))
                 break
     if custom_budget_choice != 'y':
         data_to_be_analyzed = BruteForce(('datasets/' + choice))
-        print("Format: total_spent, total_earned, stocks_to_buy", '\n',
+        print("Format: number_of_calculations, total_spent, total_earned, stocks_to_buy", '\n',
               data_to_be_analyzed.determine_optimal_investments(data_to_be_analyzed.sort_and_add_earnings()))
